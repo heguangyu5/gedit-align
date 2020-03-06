@@ -1,0 +1,5 @@
+[Plugin]
+Module=align
+Name=Align
+Description=Align blocks of text into columns
+Authors=heguangyu5
