@@ -1,6 +1,6 @@
 # Gedit 3 Align Plugin
 
-![Align Demo](align-demo.png)
+![Align Demo](align-demo.gif)
 
 ## How to compile
 
