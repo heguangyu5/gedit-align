@@ -1,12 +1,6 @@
 # Gedit 3 Align Plugin
 
-Before align
-
-![](before-align.png)
-
-After align
-
-![](after-align.png)
+![Align Demo](align-demo.png)
 
 ## How to compile
 
