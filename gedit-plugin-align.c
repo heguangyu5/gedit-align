@@ -9,6 +9,7 @@ static void gedit_view_activatable_iface_init(GeditViewActivatableInterface *ifa
 struct _GeditPluginAlign {
     PeasExtensionBase parent;
     GtkWidget *view;
+    gulong populate_popup_handler_id;
 };
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (GeditPluginAlign,
@@ -251,12 +252,16 @@ out:
 
 static void gedit_plugin_align_populate_popup(GtkTextView *text_view, GtkWidget *popup, gpointer user_data)
 {
+    //g_print("%s\n", G_STRFUNC);
+
     GtkMenuShell *menu;
     GtkWidget *menu_item;
 
     if (!GTK_IS_MENU_SHELL(popup)) {
         return;
     }
+
+    //g_print("popup append align menu items\n");
 
     menu = GTK_MENU_SHELL(popup);
 
@@ -292,12 +297,16 @@ static void gedit_plugin_align_activate(GeditViewActivatable *activatable)
 
     GeditPluginAlign *plugin = GEDIT_PLUGIN_ALIGN(activatable);
 
-    g_signal_connect(plugin->view, "populate-popup", G_CALLBACK(gedit_plugin_align_populate_popup), plugin);
+    plugin->populate_popup_handler_id = g_signal_connect(plugin->view, "populate-popup", G_CALLBACK(gedit_plugin_align_populate_popup), plugin);
 }
 
 static void gedit_plugin_align_deactivate(GeditViewActivatable *activatable)
 {
     //g_print("%s\n", G_STRFUNC);
+
+    GeditPluginAlign *plugin = GEDIT_PLUGIN_ALIGN(activatable);
+
+    g_signal_handler_disconnect(plugin->view, plugin->populate_popup_handler_id);
 }
 
 static void gedit_view_activatable_iface_init(GeditViewActivatableInterface *iface)
