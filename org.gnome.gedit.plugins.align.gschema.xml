@@ -1,0 +1,9 @@
+<schemalist>
+    <schema id="org.gnome.gedit.plugins.align" path="/org/gnome/gedit/plugins/align/">
+        <key name="separators" type="as">
+            <default>[" => ", " = ", ": ", ", "]</default>
+            <summary>align separators</summary>
+            <description>align separators</description>
+        </key>
+    </schema>
+</schemalist>

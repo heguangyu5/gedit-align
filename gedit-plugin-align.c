@@ -1,7 +1,8 @@
 #include "gedit-plugin-align.h"
+#include "gedit-plugin-align-configurable.h"
 #include <gedit/gedit-view.h>
 #include <gedit/gedit-view-activatable.h>
-#include <gdk/gdkkeysyms.h>
+#include <libpeas-gtk/peas-gtk.h>
 
 static void gedit_view_activatable_iface_init(GeditViewActivatableInterface *iface);
 
@@ -313,8 +314,12 @@ void peas_register_types(PeasObjectModule *module)
     //g_print("%s\n", G_STRFUNC);
 
     gedit_plugin_align_register_type(G_TYPE_MODULE(module));
+    gedit_plugin_align_configurable_register(G_TYPE_MODULE(module));
 
     peas_object_module_register_extension_type(module,
                                                GEDIT_TYPE_VIEW_ACTIVATABLE,
                                                GEDIT_PLUGIN_TYPE_ALIGN);
+    peas_object_module_register_extension_type(module,
+                                               PEAS_GTK_TYPE_CONFIGURABLE,
+                                               GEDIT_PLUGIN_TYPE_ALIGN_CONFIGURABLE);
 }
