@@ -22,14 +22,6 @@ enum {
     PROP_VIEW = 1
 };
 
-static gchar *separators[] = {
-    " => ",
-    " = ",
-    ": ",
-    ", ",
-    NULL
-};
-
 typedef struct {
     gint  line_number;
     gchar **cols;
@@ -272,6 +264,8 @@ static void gedit_plugin_align_populate_popup(GtkTextView *text_view, GtkWidget 
     gboolean can_align = gtk_text_view_get_editable(text_view)
                          && gtk_text_buffer_get_has_selection(gtk_text_view_get_buffer(text_view));
 
+    GSettings *settings = g_settings_new("org.gnome.gedit.plugins.align");
+    gchar **separators = g_settings_get_strv(settings, "separators");
     gchar **sp = separators;
     gchar *label;
     while (*sp) {
@@ -285,6 +279,8 @@ static void gedit_plugin_align_populate_popup(GtkTextView *text_view, GtkWidget 
         sp++;
         g_free(label);
     }
+    g_strfreev(separators);
+    g_object_unref(settings);
 }
 
 static void gedit_plugin_align_activate(GeditViewActivatable *activatable)
