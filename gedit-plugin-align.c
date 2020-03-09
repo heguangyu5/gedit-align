@@ -221,20 +221,23 @@ static void gedit_plugin_align_menu_item_activate(GtkMenuItem *menu_item, GeditP
         if (line->cols_len == 0) {
             continue;
         }
+        GString *s = g_string_new(NULL);
+        for (gint j = 0; j < line->cols_len; j++) {
+            g_string_append(s, line->cols[j]);
+            if (j < line->cols_len - 1) {
+                gint diff = widths[j] - line->cols_utf8_len[j];
+                if (diff > 0) {
+                    g_string_append_printf(s, "%-*s", diff, "");
+                }
+                g_string_append(s, sp);
+            }
+        }
         gtk_text_buffer_get_iter_at_line(buffer, &start, line->line_number);
         end = start;
         gtk_text_iter_forward_to_line_end(&end);
         gtk_text_buffer_delete(buffer, &start, &end);
-        for (gint j = 0; j < line->cols_len; j++) {
-            gtk_text_buffer_insert(buffer, &start, line->cols[j], -1);
-            if (j < line->cols_len - 1) {
-                gint diff = widths[j] - line->cols_utf8_len[j];
-                while (diff--) {
-                    gtk_text_buffer_insert(buffer, &start, " ", -1);
-                }
-                gtk_text_buffer_insert(buffer, &start, sp, -1);
-            }
-        }
+        gtk_text_buffer_insert(buffer, &start, s->str, s->len);
+        g_string_free(s, TRUE);
     }
 
     gtk_text_buffer_end_user_action(buffer);
